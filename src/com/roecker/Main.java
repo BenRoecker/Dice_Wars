@@ -3,6 +3,7 @@ package com.roecker;
 public class Main {
 
     public static void main(String[] args) {
-	// write your code here
+	    Joueur J1 = new Joueur();
+	    System.out.println(J1.getId());
     }
 }
