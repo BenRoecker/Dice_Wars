@@ -3,12 +3,12 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class Territoire {
-    final String id;
+    final int id;
     String idJoueur;
     int force;
     ArrayList<String> idVoisins;
 
-    public Territoire() {
-        this.id = UUID.randomUUID().toString();
+    public Territoire(int id) {
+        this.id = id;
     }
 }
