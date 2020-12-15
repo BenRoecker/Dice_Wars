@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public class Territoire {
     final int id;
-    String idJoueur;
+    int idJoueur;
     int force;
     ArrayList<String> idVoisins;
 
