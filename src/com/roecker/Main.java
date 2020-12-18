@@ -7,5 +7,6 @@ public class Main {
 	    System.out.println(J1.getId());
 	    Carte map = new Carte(5);
 	    System.out.println(map.toString());
+	    System.out.println(map.map.length);
     }
 }

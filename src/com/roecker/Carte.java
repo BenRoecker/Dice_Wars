@@ -10,7 +10,7 @@ public class Carte {
         this.map = new Territoire[nombreJoueur][4];
         Random rand = new Random();
         int id = 0;
-        for(int i = 0; i < nombreJoueur; i ++){
+        for(int i = 0; i < 5; i ++){
             for(int j = 0; j < 4; j ++){
                 Territoire test = new Territoire(id);
                 if(test.id-4 >= 0){
@@ -22,7 +22,7 @@ public class Carte {
                 if(test.id % 4 != 3){
                     test.addVoisin(id+1);
                 }
-                if(test.id+4 < 4*nombreJoueur){
+                if(test.id+4 <= 4*nombreJoueur){
                     test.addVoisin(id+4);
                 }
                 id += 1;
@@ -37,10 +37,11 @@ public class Carte {
 
     @Override
     public String toString() {
-        StringBuilder text = new StringBuilder();
-        for(int i = 0; i < 4; i ++){
-            for(int j = 0; j < map[i].length; j++){
-                text.append(map[i][j].toString());
+        StringBuilder text = new StringBuilder("\n");
+        for (Territoire[] territoires : this.map) {
+            for (Territoire territoire : territoires) {
+                text.append(territoire.toString());
+                text.append("\n");
             }
         }
         return text.toString();
