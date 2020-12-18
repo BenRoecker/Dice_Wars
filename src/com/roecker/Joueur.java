@@ -11,4 +11,8 @@ public class Joueur {
     public String getId(){
         return "L'ID du joueur est "+this.id;
     }
+
+    public void addTerritoire(Territoire add){
+        ListeTerritoire.add(add);
+    }
 }
