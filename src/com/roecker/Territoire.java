@@ -1,6 +1,5 @@
 package com.roecker;
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class Territoire {
     final int id;
@@ -20,6 +19,5 @@ public class Territoire {
 
     public void addVoisin(int id){
         idVoisins.add(id);
-
     }
 }
