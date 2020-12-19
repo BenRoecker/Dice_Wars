@@ -1,6 +1,6 @@
 package com.roecker;
 import java.util.ArrayList;
-import java.util.UUID;
+
 
 public class Joueur {
     final int id;
@@ -8,11 +8,16 @@ public class Joueur {
     public Joueur(int id) {
         this.id = id;
     }
-    public String getId(){
-        return "L'ID du joueur est "+this.id;
+    public int getId(){
+        return this.id;
     }
 
     public void addTerritoire(Territoire add){
         ListeTerritoire.add(add);
+    }
+
+    @Override
+    public String toString() {
+        return "Joueur n°"+this.getId();
     }
 }

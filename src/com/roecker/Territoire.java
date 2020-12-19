@@ -3,7 +3,6 @@ import java.util.ArrayList;
 
 public class Territoire {
     final int id;
-    int idJoueur;
     int force;
     ArrayList<Integer> idVoisins;
 
@@ -19,5 +18,17 @@ public class Territoire {
 
     public void addVoisin(int id){
         idVoisins.add(id);
+    }
+
+    public void setForce(int force) {
+        this.force = force;
+    }
+
+    public int getForce(){
+        return this.force;
+    }
+
+    public void addForce(int de){
+        this.force += de;
     }
 }
