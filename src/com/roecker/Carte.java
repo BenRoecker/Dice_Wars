@@ -1,14 +1,13 @@
 package com.roecker;
 
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.HashMap;
 
 public class Carte {
     Territoire[][] map;
 
     public Carte(int nombreJoueur){
         this.map = new Territoire[nombreJoueur][4];
-        Random rand = new Random();
         int id = 0;
         for(int i = 0; i < 5; i ++){
             for(int j = 0; j < 4; j ++){
@@ -41,8 +40,8 @@ public class Carte {
         for (Territoire[] territoires : this.map) {
             for (Territoire territoire : territoires) {
                 text.append(territoire.toString());
-                text.append("\n");
             }
+            text.append("\n");
         }
         return text.toString();
     }
