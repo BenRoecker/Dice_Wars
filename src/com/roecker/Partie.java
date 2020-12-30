@@ -56,4 +56,12 @@ public class Partie {
         }while(rendu[0] < 0 || rendu[0] >= NBjoueurs*4 || rendu[1] < 0 || rendu[1] >= NBjoueurs*4);
         return rendu;
     }
+
+    public boolean victoire(Joueur now){
+        return now.getListeTerritoire().size() == NBjoueurs * 4;
+    }
+    
+    public boolean defaite(Joueur now){
+        return now.getListeTerritoire().size() == 0;
+    }
 }
