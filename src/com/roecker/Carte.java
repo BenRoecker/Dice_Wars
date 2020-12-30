@@ -9,7 +9,7 @@ public class Carte {
     public Carte(int nombreJoueur){
         this.map = new Territoire[nombreJoueur][4];
         int id = 0;
-        for(int i = 0; i < 5; i ++){
+        for(int i = 0; i < nombreJoueur; i ++){
             for(int j = 0; j < 4; j ++){
                 Territoire test = new Territoire(id);
                 if(test.id-4 >= 0){
