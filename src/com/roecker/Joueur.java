@@ -19,6 +19,18 @@ public class Joueur {
         ListeTerritoire.add(add);
     }
 
+    public int attaquerTerritoire(int Tattaque){
+        int lancer = 0;
+        for (int i = 0; i < ListeTerritoire.toArray().length; i++) {
+            if (Tattaque == ListeTerritoire.get(i).id){
+                lancer = ListeTerritoire.get(i).lancerDes();
+                System.out.println(lancer);
+                return lancer;
+            }
+        }
+        return lancer;
+    }
+
     @Override
     public String toString() {
         StringBuilder rendu = new StringBuilder("Joueur n°"+this.getId()+", territoire : ");

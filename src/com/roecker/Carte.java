@@ -5,9 +5,11 @@ import java.util.HashMap;
 
 public class Carte {
     Territoire[][] map;
+    int nbJoueurs;
 
     public Carte(int nombreJoueur){
         this.map = new Territoire[nombreJoueur][4];
+        this.nbJoueurs = nombreJoueur;
         int id = 0;
         for(int i = 0; i < nombreJoueur; i ++){
             for(int j = 0; j < 4; j ++){
@@ -32,6 +34,19 @@ public class Carte {
 
     public Territoire[][] getMap() {
         return map;
+    }
+
+    public Territoire getTerritoire(int id){
+        Territoire Terri;
+        for (int i = 0; i < nbJoueurs; i++) {
+            for (int j = 0; j < 4; j++) {
+                if(id == map[nbJoueurs][j].id){
+                    Terri = map[nbJoueurs][j];
+                    return Terri;
+                }
+            }
+        }
+        return null;
     }
 
     @Override

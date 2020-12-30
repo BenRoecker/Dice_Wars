@@ -1,5 +1,6 @@
 package com.roecker;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Territoire {
     final int id;
@@ -9,6 +10,16 @@ public class Territoire {
     public Territoire(int id) {
         this.id = id;
         this.idVoisins = new ArrayList<>();
+    }
+
+    public int lancerDes(){
+        int des = 5;
+        int lancer = 0;
+        Random rand = new Random();
+        for (int i = 0; i < force; i++) {
+            lancer = lancer + rand.nextInt(des) + 1;
+        }
+        return lancer;
     }
 
     @Override

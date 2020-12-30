@@ -43,6 +43,14 @@ public class Partie {
         }
         System.out.println(map);
         System.out.println(challenger);
+        Scanner rep = new Scanner(System.in);
+        System.out.println("Tattaque : ");
+        int Tattaque = rep.nextInt();
+        System.out.println("Tdefense : ");
+        int Tdefense = rep.nextInt();
+        int atq = challenger.get(0).attaquerTerritoire(Tattaque);
+        int def = challenger.get(1).attaquerTerritoire(Tdefense);
+        System.out.println(def - atq);
     }
 
     public int[] attackJoueur(){
