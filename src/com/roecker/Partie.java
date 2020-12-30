@@ -3,6 +3,7 @@ package com.roecker;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Partie {
     private final int NBjoueurs;
@@ -40,7 +41,21 @@ public class Partie {
             }
             challenger.add(J);
         }
+        int lol = attackJoueur();
+        System.out.println(lol);
         System.out.println(map);
         System.out.println(challenger);
+    }
+
+    public int attackJoueur(){
+        Scanner saisieIDs = new Scanner(System.in);
+        System.out.println("Veuillez saisir le teritoire qui attaque suivi du territoire à attaquer :");
+        int ent, ent1;
+        do{
+            System.out.println("Un nombre compris entre 1 et "+NBjoueurs*4);
+            ent = saisieIDs.nextInt();
+            ent1 = saisieIDs.nextInt();
+        }while(ent < 0 || ent >= NBjoueurs*4 || ent1 < 0 || ent1 >= NBjoueurs);
+        return ent1;
     }
 }
