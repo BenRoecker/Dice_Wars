@@ -41,21 +41,19 @@ public class Partie {
             }
             challenger.add(J);
         }
-        int lol = attackJoueur();
-        System.out.println(lol);
         System.out.println(map);
         System.out.println(challenger);
     }
 
-    public int attackJoueur(){
+    public int[] attackJoueur(){
         Scanner saisieIDs = new Scanner(System.in);
         System.out.println("Veuillez saisir le teritoire qui attaque suivi du territoire à attaquer :");
-        int ent, ent1;
+        int[] rendu = new int[2];
         do{
             System.out.println("Un nombre compris entre 1 et "+NBjoueurs*4);
-            ent = saisieIDs.nextInt();
-            ent1 = saisieIDs.nextInt();
-        }while(ent < 0 || ent >= NBjoueurs*4 || ent1 < 0 || ent1 >= NBjoueurs);
-        return ent1;
+            rendu[0] = saisieIDs.nextInt();
+            rendu[1] = saisieIDs.nextInt();
+        }while(rendu[0] < 0 || rendu[0] >= NBjoueurs*4 || rendu[1] < 0 || rendu[1] >= NBjoueurs*4);
+        return rendu;
     }
 }
