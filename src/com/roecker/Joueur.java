@@ -31,6 +31,19 @@ public class Joueur {
         return lancer;
     }
 
+    public boolean verifTerritoire(int Tattaque, int Tdefense){
+        for (int i = 0; i < ListeTerritoire.toArray().length; i++) {
+            if(Tattaque == ListeTerritoire.get(i).id){
+                for (int j = 0; j < ListeTerritoire.get(i).idVoisins.toArray().length; j++) {
+                    if(Tdefense == ListeTerritoire.get(i).idVoisins.get(j)){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         StringBuilder rendu = new StringBuilder("Joueur n°"+this.getId()+", territoire : ");
