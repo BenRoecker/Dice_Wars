@@ -76,6 +76,4 @@ public class Partie {
     public boolean defaite(Joueur now){
         return now.getListeTerritoire().size() == 0;
     }
-
-
 }

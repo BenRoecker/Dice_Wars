@@ -38,11 +38,10 @@ public class Carte {
 
     public Territoire getTerritoire(int id){
         Territoire Terri;
-        for (int i = 0; i < nbJoueurs; i++) {
-            for (int j = 0; j < 4; j++) {
-                if(id == map[nbJoueurs][j].id){
-                    Terri = map[nbJoueurs][j];
-                    return Terri;
+        for (Territoire[] ligne : this.map) {
+            for (Territoire territoire : ligne) {
+                if(id == territoire.id){
+                    return territoire;
                 }
             }
         }
