@@ -40,6 +40,12 @@ public class Joueur {
             if(Tattaque == territoire.id) {
                 for (int voisin : territoire.idVoisins) {
                     if(Tdefense == voisin) {
+                        for(Territoire territoirevoisin : ListeTerritoire){
+                            if(territoirevoisin.id == Tdefense){
+                                return false;
+                                //exceptions
+                            }
+                        }
                         return true;
                     }
                 }

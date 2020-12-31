@@ -61,7 +61,7 @@ public class Partie {
         }
     }
 
-    public int[] attackJoueur(){
+    public int[] demandeattack(){
         Scanner saisieIDs = new Scanner(System.in);
         System.out.println("Veuillez saisir le teritoire qui attaque suivi du territoire à attaquer :");
         int[] rendu = new int[2];
@@ -73,12 +73,42 @@ public class Partie {
         return rendu;
     }
 
+    public Joueur findjoueurs(int id){
+        for(Joueur joueur: joueurs){
+            for(Territoire territoire : joueur.ListeTerritoire){
+                if(id == territoire.id){
+                    return joueur;
+                }
+            }
+        }
+        return null;
+    }
+
     public boolean victoire(Joueur now){
         return now.getListeTerritoire().size() == NBjoueurs * 4;
     }
     
     public boolean defaite(Joueur now){
         return now.getListeTerritoire().size() == 0;
+    }
+
+    public boolean combat(Joueur now){
+        int[] rendu = demandeattack();
+        int Idattaque = rendu[0];
+        int Iddefense = rendu[1];
+        //ajout try et catch pour les exceptions
+        if(now.verifTerritoire(Idattaque,Iddefense)){
+            int attaque = now.attaquerTerritoire(Idattaque);
+            int defense = findjoueurs(Iddefense).attaquerTerritoire(Iddefense);
+            if(attaque-defense > 0){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+            // catch excecptions
+        }
     }
 
 }
