@@ -7,6 +7,8 @@ import java.util.Scanner;
 
 public class Partie {
     private final int NBjoueurs;
+    private Carte map;
+    private ArrayList<Joueur> joueurs;
 
     //Inisialisation
     Partie(int joueurs){
@@ -42,6 +44,8 @@ public class Partie {
             challenger.add(J);
         }
         System.out.println(map);
+        this.map = map;
+        this.joueurs = challenger;
         System.out.println(challenger);
         Scanner rep = new Scanner(System.in);
         System.out.println("Tattaque : ");
@@ -76,4 +80,5 @@ public class Partie {
     public boolean defaite(Joueur now){
         return now.getListeTerritoire().size() == 0;
     }
+
 }
