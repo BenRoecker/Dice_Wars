@@ -21,32 +21,34 @@ public class Joueur {
 
     public int attaquerTerritoire(int Tattaque){
         int lancer = 0;
-        for (int i = 0; i < ListeTerritoire.toArray().length; i++) {
-            if (Tattaque == ListeTerritoire.get(i).id){
-                lancer = ListeTerritoire.get(i).lancerDes();
-                System.out.println(lancer);
-                return lancer;
+        for (Territoire territoire : ListeTerritoire) {
+            if (Tattaque == territoire.id){
+                if(territoire.force == 1){
+                    //exception
+                }else{
+                    lancer = territoire.lancerDes();
+                    System.out.println(lancer);
+                    return lancer;
+                }
             }
         }
         return lancer;
     }
 
     public boolean verifTerritoire(int Tattaque, int Tdefense){
-        for (int i = 0; i < ListeTerritoire.toArray().length; i++) {
-            if(Tattaque == ListeTerritoire.get(i).id) {
-                for (int j = 0; j < ListeTerritoire.get(i).idVoisins.toArray().length; j++) {
-                    if(Tdefense == ListeTerritoire.get(i).idVoisins.get(j)) {
-                        for (int k = 0; k < ListeTerritoire.toArray().length; k++) {
-                            if (Tdefense == ListeTerritoire.get(k).id) {
-                                return false;
-                            }
-                        }
+        for (Territoire territoire : ListeTerritoire) {
+            if(Tattaque == territoire.id) {
+                for (int voisin : territoire.idVoisins) {
+                    if(Tdefense == voisin) {
                         return true;
                     }
                 }
+                return false;
+                // exceptions
             }
         }
         return false;
+        // exceptions
     }
 
     @Override
