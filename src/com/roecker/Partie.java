@@ -47,17 +47,9 @@ public class Partie {
         this.map = map;
         this.joueurs = challenger;
         System.out.println(challenger);
-        Scanner rep = new Scanner(System.in);
-        System.out.println("Tattaque : ");
-        int Tattaque = rep.nextInt();
-        System.out.println("Tdefense : ");
-        int Tdefense = rep.nextInt();
-        if(challenger.get(0).verifTerritoire(Tattaque, Tdefense)){
-            int atq = challenger.get(0).attaquerTerritoire(Tattaque);
-            int def = challenger.get(1).attaquerTerritoire(Tdefense);
-            System.out.println("Le resultat est : " + (def - atq));
-        }else {
-            System.out.println("Il y a un pb !!!");
+        Joueur joueur = this.joueurs.get(0);
+        if(combat(joueur)){
+            System.out.println("gagné");
         }
     }
 
@@ -107,7 +99,7 @@ public class Partie {
             }
         }else{
             return false;
-            // catch excecptions
+            // catch exceptions
         }
     }
 
