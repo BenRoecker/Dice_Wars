@@ -48,9 +48,13 @@ public class Partie {
         int Tattaque = rep.nextInt();
         System.out.println("Tdefense : ");
         int Tdefense = rep.nextInt();
-        int atq = challenger.get(0).attaquerTerritoire(Tattaque);
-        int def = challenger.get(1).attaquerTerritoire(Tdefense);
-        System.out.println(def - atq);
+        if(challenger.get(0).verifTerritoire(Tattaque, Tdefense)){
+            int atq = challenger.get(0).attaquerTerritoire(Tattaque);
+            int def = challenger.get(1).attaquerTerritoire(Tdefense);
+            System.out.println("Le resultat est : " + (def - atq));
+        }else {
+            System.out.println("Il y a un pb !!!");
+        }
     }
 
     public int[] attackJoueur(){

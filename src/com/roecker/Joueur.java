@@ -33,9 +33,14 @@ public class Joueur {
 
     public boolean verifTerritoire(int Tattaque, int Tdefense){
         for (int i = 0; i < ListeTerritoire.toArray().length; i++) {
-            if(Tattaque == ListeTerritoire.get(i).id){
+            if(Tattaque == ListeTerritoire.get(i).id) {
                 for (int j = 0; j < ListeTerritoire.get(i).idVoisins.toArray().length; j++) {
-                    if(Tdefense == ListeTerritoire.get(i).idVoisins.get(j)){
+                    if(Tdefense == ListeTerritoire.get(i).idVoisins.get(j)) {
+                        for (int k = 0; k < ListeTerritoire.toArray().length; k++) {
+                            if (Tdefense == ListeTerritoire.get(k).id) {
+                                return false;
+                            }
+                        }
                         return true;
                     }
                 }
