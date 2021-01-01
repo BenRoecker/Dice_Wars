@@ -87,7 +87,7 @@ public class Partie {
         return now.getListeTerritoire().size() == 0;
     }
 
-    public boolean combat(Joueur attaque) throws Exception {
+    public void combat(Joueur attaque) throws Exception {
         //initialisation combat
         int[] rendu = demandeattack();
         int Idattaque = rendu[0];
@@ -121,10 +121,8 @@ public class Partie {
                 attaque.addTerritoire(defense.popTerritoire(Iddefense));
                 quidefend.setForce(quiattaque.getForce()-1);
                 quiattaque.setForce(1);
-                return true;
             }else{
                 quiattaque.setForce(1);
-                return false;
             }
         }
 }
