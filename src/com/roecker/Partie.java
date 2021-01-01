@@ -51,6 +51,7 @@ public class Partie {
         if(combat(joueur)){
             System.out.println("gagné");
         }
+        System.out.println(challenger);
     }
 
     public int[] demandeattack(){
@@ -84,17 +85,25 @@ public class Partie {
         return now.getListeTerritoire().size() == 0;
     }
 
-    public boolean combat(Joueur now){
+    public boolean combat(Joueur attaque){
+        //initialisation combat
         int[] rendu = demandeattack();
         int Idattaque = rendu[0];
         int Iddefense = rendu[1];
         //ajout try et catch pour les exceptions
-        if(now.verifTerritoire(Idattaque,Iddefense)){
-            int attaque = now.attaquerTerritoire(Idattaque);
-            int defense = findjoueurs(Iddefense).attaquerTerritoire(Iddefense);
-            if(attaque-defense > 0){
+        if(attaque.verifTerritoire(Idattaque,Iddefense)){
+            int valattaque = attaque.attaquerTerritoire(Idattaque);
+            Joueur defense = findjoueurs(Iddefense);
+            int valdefense = defense.attaquerTerritoire(Iddefense);
+            Territoire quiattaque = map.getTerritoire(Idattaque);
+            Territoire quidefend = map.getTerritoire(Iddefense);
+            if(valattaque-valdefense > 0){
+                attaque.addTerritoire(defense.popTerritoire(Iddefense));
+                quidefend.setForce(quiattaque.getForce()-1);
+                quiattaque.setForce(1);
                 return true;
             }else{
+                quiattaque.setForce(1);
                 return false;
             }
         }else{
@@ -102,5 +111,6 @@ public class Partie {
             // catch exceptions
         }
     }
+
 
 }

@@ -12,6 +12,10 @@ public class Territoire {
         this.idVoisins = new ArrayList<>();
     }
 
+    public int getId(){
+        return this.id;
+    }
+
     public int lancerDes(){
         int des = 5;
         int lancer = 0;

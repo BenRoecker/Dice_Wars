@@ -19,17 +19,24 @@ public class Joueur {
         ListeTerritoire.add(add);
     }
 
+    public Territoire popTerritoire(int idpop){
+        for(Territoire territoire : ListeTerritoire){
+            if(territoire.getId() == idpop){
+                Territoire rendu = territoire;
+                ListeTerritoire.remove(rendu);
+                return rendu;
+            }
+        }
+       return null;
+    }
+
     public int attaquerTerritoire(int Tattaque){
         int lancer = 0;
         for (Territoire territoire : ListeTerritoire) {
             if (Tattaque == territoire.id){
-                if(territoire.force == 1){
-                    //exception
-                }else{
-                    lancer = territoire.lancerDes();
-                    System.out.println(lancer);
-                    return lancer;
-                }
+                lancer = territoire.lancerDes();
+                System.out.println(lancer);
+                return lancer;
             }
         }
         return lancer;
@@ -38,23 +45,29 @@ public class Joueur {
     public boolean verifTerritoire(int Tattaque, int Tdefense){
         for (Territoire territoire : ListeTerritoire) {
             if(Tattaque == territoire.id) {
-                for (int voisin : territoire.idVoisins) {
-                    if(Tdefense == voisin) {
-                        for(Territoire territoirevoisin : ListeTerritoire){
-                            if(territoirevoisin.id == Tdefense){
-                                return false;
-                                //exceptions
+                if(territoire.force != 1){
+                    for (int voisin : territoire.idVoisins) {
+                        if(Tdefense == voisin) {
+                            for(Territoire territoirevoisin : ListeTerritoire){
+                                if(territoirevoisin.id == Tdefense){
+                                    return false;
+                                    //exceptions le territoire de defense appartient au joueur qui attaque
+                                }
                             }
+                            return true;
                         }
-                        return true;
                     }
+                    return false;
+                    // exceptions le territoire de defense n'est pas un voisin
+                }else{
+                    return false;
+                    // exceptions force 1
                 }
-                return false;
-                // exceptions
+
             }
         }
         return false;
-        // exceptions
+        // exceptions le territoire d'attaque n'appartient pas au joueurs
     }
 
     @Override
