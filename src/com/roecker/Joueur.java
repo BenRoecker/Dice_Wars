@@ -34,14 +34,14 @@ public class Joueur {
         for (Territoire territoire : ListeTerritoire) {
             if (Tattaque == territoire.id){
                 if(territoire.getForce() == 1){
-                    throw new Exception();// force = 1
+                    throw new AttackWithOneDiceException("Tu ne peux pas attaquer avec ce territoire il n'a qu'un dé");// force = 1
                 }
                 lancer = territoire.lancerDes();
                 System.out.println(lancer);
                 return lancer;
             }
         }
-        throw new Exception();// non propriétaire
+        throw new NotPocessedTerritoryException("Tu ne peux pas attaquer avec un territoire que tu ne possèdes pas");// non propriétaire
     }
 
     public int defendreTerritoire(int Tdefense) throws Exception{
@@ -53,7 +53,7 @@ public class Joueur {
                 return lancer;
             }
         }
-        throw new Exception();// non propriétaire
+        throw new NotPocessedTerritoryException("Tu ne peux pas défendre avec un territoire que tu ne possèdes pas");
     }
 
     public boolean verifTerritoire(int Tattaque, int Tdefense){

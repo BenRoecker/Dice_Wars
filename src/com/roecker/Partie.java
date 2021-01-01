@@ -51,7 +51,7 @@ public class Partie {
         try{
             combat(joueur);
         }catch(Exception e){
-            System.out.println("Non c'est pas cool");
+            System.out.println(e.getMessage());
         }
         System.out.println(challenger);
     }
@@ -97,11 +97,11 @@ public class Partie {
             try{
                 valattaque = attaque.attaquerTerritoire(Idattaque);
             }catch(Exception e){
-                System.out.println("tu peux pas attaquer");
+                System.out.println(e.getMessage());
             }
             Joueur defense = findjoueurs(Iddefense);
             if(defense == attaque){
-                throw new Exception(); // le joueur qui attaque est le joueur qui défend
+                throw new YouAttackYourselfException("Tu ne peux pas attaquer un territoire que tu possède."); // le joueur qui attaque est le joueur qui défend
             }
             int valdefense = 0;
             try{
@@ -114,7 +114,7 @@ public class Partie {
             Territoire quidefend = map.getTerritoire(Iddefense);
             for(int voisin : quiattaque.idVoisins){
                 if(voisin != quidefend.id){
-                    throw new Exception();// le territoire attaqué n'est pas un voisin
+                    throw new NotNeighbourException("le territoire que tu attaques n'est pas voisins");// le territoire attaqué n'est pas un voisin
                 }
             }
             if(valattaque-valdefense > 0){
