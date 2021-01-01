@@ -85,7 +85,7 @@ public class Partie {
         return now.getListeTerritoire().size() == 0;
     }
 
-    public boolean combat(Joueur attaque){
+    public boolean combat(Joueur attaque) throws Exception {
         //initialisation combat
         int[] rendu = demandeattack();
         int Idattaque = rendu[0];
@@ -94,9 +94,17 @@ public class Partie {
         if(attaque.verifTerritoire(Idattaque,Iddefense)){
             int valattaque = attaque.attaquerTerritoire(Idattaque);
             Joueur defense = findjoueurs(Iddefense);
-            int valdefense = defense.attaquerTerritoire(Iddefense);
+            if(defense == attaque){
+                throw new Exception(); // le joueur qui attaque est le joueur qui défend
+            }
+            int valdefense = defense.defendreTerritoire(Iddefense);
             Territoire quiattaque = map.getTerritoire(Idattaque);
             Territoire quidefend = map.getTerritoire(Iddefense);
+            for(int voisin : quiattaque.idVoisins){
+                if(voisin != quidefend.id){
+                    throw new Exception();// le territoire attaqué n'est pas un voisin
+                }
+            }
             if(valattaque-valdefense > 0){
                 attaque.addTerritoire(defense.popTerritoire(Iddefense));
                 quidefend.setForce(quiattaque.getForce()-1);
