@@ -112,17 +112,20 @@ public class Partie {
 
             Territoire quiattaque = map.getTerritoire(Idattaque);
             Territoire quidefend = map.getTerritoire(Iddefense);
+            boolean presence = false;
             for(int voisin : quiattaque.idVoisins){
-                if(voisin != quidefend.id){
-                    throw new NotNeighbourException("le territoire que tu attaques n'est pas voisins");// le territoire attaqué n'est pas un voisin
+                if (voisin == quidefend.id) {
+                    presence = true;// le territoire attaqué n'est pas un voisin
+                    break;
                 }
+            }
+            if(!presence){
+                throw new NotNeighbourException("le territoire que tu attaques n'est pas voisins");
             }
             if(valattaque-valdefense > 0){
                 attaque.addTerritoire(defense.popTerritoire(Iddefense));
                 quidefend.setForce(quiattaque.getForce()-1);
-                quiattaque.setForce(1);
-            }else{
-                quiattaque.setForce(1);
             }
-        }
+            quiattaque.setForce(1);
+    }
 }
