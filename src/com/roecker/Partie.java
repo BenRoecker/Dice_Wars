@@ -48,8 +48,10 @@ public class Partie {
         this.joueurs = challenger;
         System.out.println(challenger);
         Joueur joueur = this.joueurs.get(0);
-        if(combat(joueur)){
-            System.out.println("gagné");
+        try{
+            combat(joueur);
+        }catch(Exception e){
+            System.out.println("Non c'est pas cool");
         }
         System.out.println(challenger);
     }
@@ -91,13 +93,23 @@ public class Partie {
         int Idattaque = rendu[0];
         int Iddefense = rendu[1];
         //ajout try et catch pour les exceptions
-        if(attaque.verifTerritoire(Idattaque,Iddefense)){
-            int valattaque = attaque.attaquerTerritoire(Idattaque);
+            int valattaque = 0;
+            try{
+                valattaque = attaque.attaquerTerritoire(Idattaque);
+            }catch(Exception e){
+                System.out.println("tu peux pas attaquer");
+            }
             Joueur defense = findjoueurs(Iddefense);
             if(defense == attaque){
                 throw new Exception(); // le joueur qui attaque est le joueur qui défend
             }
-            int valdefense = defense.defendreTerritoire(Iddefense);
+            int valdefense = 0;
+            try{
+                valdefense = defense.defendreTerritoire(Iddefense);
+            }catch(Exception e){
+                System.out.println("tu peux pas te défendre");
+            }
+
             Territoire quiattaque = map.getTerritoire(Idattaque);
             Territoire quidefend = map.getTerritoire(Iddefense);
             for(int voisin : quiattaque.idVoisins){
@@ -114,11 +126,5 @@ public class Partie {
                 quiattaque.setForce(1);
                 return false;
             }
-        }else{
-            return false;
-            // catch exceptions
         }
-    }
-
-
 }
