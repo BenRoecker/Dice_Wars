@@ -54,6 +54,8 @@ public class Partie {
             System.out.println(e.getMessage());
         }
         System.out.println(challenger);
+        renfort(this.joueurs);
+        System.out.println(challenger);
     }
 
     public int[] demandeattack(){
@@ -87,7 +89,7 @@ public class Partie {
         return now.getListeTerritoire().size() == 0;
     }
 
-    public void combat(Joueur attaque) throws Exception {
+    public void combat(Joueur attaque) throws YouAttackYourselfException, NotNeighbourException {
         //initialisation combat
         int[] rendu = demandeattack();
         int Idattaque = rendu[0];
@@ -127,5 +129,22 @@ public class Partie {
                 quidefend.setForce(quiattaque.getForce()-1);
             }
             quiattaque.setForce(1);
+    }
+
+    public void renfort(ArrayList<Joueur> joueurs){
+        for(Joueur joueur : joueurs){
+            int nbTerritoire = joueur.ListeTerritoire.size();
+            for(int i = 0; i < nbTerritoire; i++){
+                ArrayList<Territoire> possRenfort = new ArrayList<>();
+                for(Territoire territoire : joueur.ListeTerritoire){
+                    if(territoire.force < 8){
+                        possRenfort.add(territoire);
+                    }
+                }
+                Random rand = new Random();
+                int randIndex = rand.nextInt(possRenfort.size());
+                possRenfort.get(randIndex).addForce(1);
+            }
+        }
     }
 }

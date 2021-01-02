@@ -16,7 +16,7 @@ public class Territoire {
         return this.id;
     }
 
-    public int lancerDes() throws Exception {
+    public int lancerDes(){
         int des = 5;
         int lancer = 0;
         Random rand = new Random();

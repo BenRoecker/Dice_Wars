@@ -29,7 +29,7 @@ public class Joueur {
        return null;
     }
 
-    public int attaquerTerritoire(int Tattaque) throws Exception {
+    public int attaquerTerritoire(int Tattaque) throws AttackWithOneDiceException, NotPocessedTerritoryException {
         int lancer = 0;
         for (Territoire territoire : ListeTerritoire) {
             if (Tattaque == territoire.id){
@@ -44,7 +44,7 @@ public class Joueur {
         throw new NotPocessedTerritoryException("Tu ne peux pas attaquer avec un territoire que tu ne possèdes pas");// non propriétaire
     }
 
-    public int defendreTerritoire(int Tdefense) throws Exception{
+    public int defendreTerritoire(int Tdefense) throws NotPocessedTerritoryException{
         int lancer = 0;
         for (Territoire territoire : ListeTerritoire) {
             if (Tdefense == territoire.id){
