@@ -1,5 +1,6 @@
 package com.roecker;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -43,31 +44,38 @@ public class Partie {
             }
             challenger.add(J);
         }
-        System.out.println(map);
         this.map = map;
         this.joueurs = challenger;
-        System.out.println(challenger);
-        Joueur joueur = this.joueurs.get(0);
-        try{
-            combat(joueur);
-        }catch(Exception e){
-            System.out.println(e.getMessage());
-        }
-        System.out.println(challenger);
-        renfort(this.joueurs);
         System.out.println(challenger);
     }
 
     public int[] demandeattack(){
         Scanner saisieIDs = new Scanner(System.in);
-        System.out.println("Veuillez saisir le teritoire qui attaque suivi du territoire à attaquer :");
+        System.out.println("Veuillez saisir le teritoire qui attaque suivi du territoire à attaquer : ('fin' pour arreter)");
         int[] rendu = new int[2];
-        do{
-            System.out.println("Un nombre compris entre 1 et "+NBjoueurs*4);
-            rendu[0] = saisieIDs.nextInt();
-            rendu[1] = saisieIDs.nextInt();
-        }while(rendu[0] < 0 || rendu[0] >= NBjoueurs*4 || rendu[1] < 0 || rendu[1] >= NBjoueurs*4);
-        return rendu;
+
+        while(!saisieIDs.hasNext("fin")){
+            Scanner Linesec = new Scanner(saisieIDs.nextLine());
+            if(Linesec.hasNextInt()){
+                int result1 = Linesec.nextInt();
+                if(Linesec.hasNextInt() && result1 >= 0 && result1 < 4*NBjoueurs){
+                    int result2 = Linesec.nextInt();
+                    if(result2 >= 0 && result2 < 4 * NBjoueurs){
+                        rendu[0] = result1;
+                        rendu[1] = result2;
+                        return rendu;
+                    }else{
+                        System.out.println("Ces territoires n'existe pas.");
+                    }
+                }
+                else{
+                    System.out.println("Le deuxième n'est pas un nombre !");
+                }
+            }else{
+                System.out.println("Le premier n'est pas un nombre !");
+            }
+        }
+        return null;
     }
 
     public Joueur findjoueurs(int id){
@@ -89,12 +97,13 @@ public class Partie {
         return now.getListeTerritoire().size() == 0;
     }
 
-    public void combat(Joueur attaque) throws YouAttackYourselfException, NotNeighbourException {
+    public boolean combat(Joueur attaque) throws YouAttackYourselfException, NotNeighbourException {
         //initialisation combat
         int[] rendu = demandeattack();
-        int Idattaque = rendu[0];
-        int Iddefense = rendu[1];
-        //ajout try et catch pour les exceptions
+        if(rendu != null){
+            int Idattaque = rendu[0];
+            int Iddefense = rendu[1];
+            //ajout try et catch pour les exceptions
             int valattaque = 0;
             try{
                 valattaque = attaque.attaquerTerritoire(Idattaque);
@@ -129,6 +138,10 @@ public class Partie {
                 quidefend.setForce(quiattaque.getForce()-1);
             }
             quiattaque.setForce(1);
+            return true;
+        }else{
+            return  false;
+        }
     }
 
     public void renfort(ArrayList<Joueur> joueurs){
@@ -141,10 +154,31 @@ public class Partie {
                         possRenfort.add(territoire);
                     }
                 }
-                Random rand = new Random();
-                int randIndex = rand.nextInt(possRenfort.size());
-                possRenfort.get(randIndex).addForce(1);
+                if(possRenfort.size() != 0){
+                    Random rand = new Random();
+                    int randIndex = rand.nextInt(possRenfort.size());
+                    possRenfort.get(randIndex).addForce(1);
+                }
             }
         }
+    }
+
+    public Carte getMap(){
+        return this.map;
+    }
+
+    public ArrayList<Joueur> getJoueurs(){
+        return this.joueurs;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder rendu = new StringBuilder("Les joueurs sont :");
+        rendu.append("\n");
+        for(Joueur joueur : this.joueurs){
+            rendu.append(joueur.toString());
+            rendu.append("\n");
+        }
+        return rendu.toString();
     }
 }

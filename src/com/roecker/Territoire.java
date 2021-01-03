@@ -28,7 +28,7 @@ public class Territoire {
 
     @Override
     public String toString() {
-        return "id : " + this.id + ", voisin :" + this.idVoisins + ", Force :"+force;
+        return "id : " + this.id + ", voisin :" + this.idVoisins + ", Force :"+force +" .";
     }
 
     public void addVoisin(int id){

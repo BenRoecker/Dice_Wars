@@ -56,34 +56,6 @@ public class Joueur {
         throw new NotPocessedTerritoryException("Tu ne peux pas défendre avec un territoire que tu ne possèdes pas");
     }
 
-    public boolean verifTerritoire(int Tattaque, int Tdefense){
-        for (Territoire territoire : ListeTerritoire) {
-            if(Tattaque == territoire.id) {
-                if(territoire.force != 1){
-                    for (int voisin : territoire.idVoisins) {
-                        if(Tdefense == voisin) {
-                            for(Territoire territoirevoisin : ListeTerritoire){
-                                if(territoirevoisin.id == Tdefense){
-                                    return false;
-                                    //exceptions le territoire de defense appartient au joueur qui attaque Done
-                                }
-                            }
-                            return true;
-                        }
-                    }
-                    return false;
-                    // exceptions le territoire de defense n'est pas un voisin Done
-                }else{
-                    return false;
-                    // exceptions force 1 Done
-                }
-
-            }
-        }
-        return false;
-        // exceptions le territoire d'attaque n'appartient pas au joueurs Done
-    }
-
     @Override
     public String toString() {
         StringBuilder rendu = new StringBuilder("Joueur n°"+this.getId()+", territoire : ");
