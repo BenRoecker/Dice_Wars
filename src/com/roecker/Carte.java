@@ -1,8 +1,5 @@
 package com.roecker;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 public class Carte {
     Territoire[][] map;
     int nbJoueurs;
