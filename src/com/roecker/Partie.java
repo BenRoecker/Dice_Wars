@@ -50,7 +50,7 @@ public class Partie {
 
     public int[] demandeattack(){
         Scanner saisieIDs = new Scanner(System.in);
-        System.out.println("Veuillez saisir le teritoire qui attaque suivi du territoire à attaquer : ('fin' pour arreter)");
+        System.out.println("\u001B[0m" + "Veuillez saisir le teritoire qui attaque suivi du territoire à attaquer : ('fin' pour arreter)");
         int[] rendu = new int[2];
 
         while(!saisieIDs.hasNext("fin")){
@@ -174,10 +174,25 @@ public class Partie {
     public String toString() {
         StringBuilder rendu = new StringBuilder("Les joueurs sont :");
         rendu.append("\n");
+
+        int i = 0;
         for(Joueur joueur : this.joueurs){
             rendu.append(joueur.toString());
+            i ++;
             rendu.append("\n");
         }
         return rendu.toString();
+    }
+
+    public void suppJoueur(Joueur now){
+        if(joueurs.get(0) == now){
+            ArrayList<Joueur> newlist = new ArrayList<>();
+            for(int i = 1; i < joueurs.size();i ++){
+                newlist.add(joueurs.get(i));
+            }
+            joueurs = newlist;
+        }else{
+            joueurs.remove(now);
+        }
     }
 }
