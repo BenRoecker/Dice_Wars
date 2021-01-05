@@ -40,8 +40,9 @@ public class Main {
                     if(jeu.victoire(joueur)){
                         fin = true;
                         System.out.println("Le joueur "+joueur.getId()+" a gagné !");
+                    }else {
+                        System.out.println(jeu);
                     }
-                    System.out.println(jeu);
                 }while(test);
                 if(fin){
                     break;
