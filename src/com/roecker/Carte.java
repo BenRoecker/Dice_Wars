@@ -23,7 +23,7 @@ public class Carte {
                 if(test.id % 4 != 3){
                     test.addVoisin(id+1);
                 }
-                if(test.id+4 <= 4*nombreJoueur){
+                if(test.id+4 < 4*nombreJoueur){
                     test.addVoisin(id+4);
                 }
                 id += 1;

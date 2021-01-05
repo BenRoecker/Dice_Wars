@@ -37,7 +37,6 @@ public class Joueur {
                     throw new AttackWithOneDiceException("Tu ne peux pas attaquer avec ce territoire il n'a qu'un dé");// force = 1
                 }
                 lancer = territoire.lancerDes();
-                System.out.println(lancer);
                 return lancer;
             }
         }
@@ -49,7 +48,6 @@ public class Joueur {
         for (Territoire territoire : ListeTerritoire) {
             if (Tdefense == territoire.id){
                 lancer = territoire.lancerDes();
-                System.out.println(lancer);
                 return lancer;
             }
         }
@@ -58,7 +56,7 @@ public class Joueur {
 
     @Override
     public String toString() {
-        StringBuilder rendu = new StringBuilder("Joueur n°"+this.getId()+", territoire : ");
+        StringBuilder rendu = new StringBuilder("Joueur n°"+this.getId()+", territoires : \n");
         for(Territoire i : ListeTerritoire){
             rendu.append(i.toString());
         }
