@@ -1,63 +1,69 @@
 package com.roecker;
 import java.util.ArrayList;
-
+import java.util.Random;
 
 public class Joueur {
-    final int id;
-    ArrayList<Territoire> ListeTerritoire;
+    private final int id; // ajout private
+    private ArrayList<Territoire> Territoires;
+
     public Joueur(int id) {
         this.id = id;
-        this.ListeTerritoire = new ArrayList<>();
+        this.Territoires = new ArrayList<>();
     }
-    public int getId(){
-        return this.id;
+
+    public int getId() {
+        return id;
     }
-    public ArrayList<Territoire> getListeTerritoire(){
-        return this.ListeTerritoire;
+
+    public ArrayList<Territoire> getListeTerritoire() {
+        return Territoires;
     }
+
     public void addTerritoire(Territoire add){
-        ListeTerritoire.add(add);
+        Territoires.add(add);
     }
 
-    public Territoire popTerritoire(int idpop){
-        for(Territoire territoire : ListeTerritoire){
-            if(territoire.getId() == idpop){
-                ListeTerritoire.remove(territoire);
-                return territoire;
-            }
+    public Territoire popTerritoire(Territoire pop ){
+        Territoires.remove(pop);
+        return pop;
+    }
+
+    public int attackTerritoire(Territoire attack) throws AttackWithOneDiceException {
+        int diceThrows = 0;
+        if(attack.getForce() == 1){
+            throw new AttackWithOneDiceException();// force = 1
         }
-       return null;
+        diceThrows = attack.diceThrower();
+        return diceThrows;
     }
 
-    public int attaquerTerritoire(int Tattaque) throws AttackWithOneDiceException, NotPocessedTerritoryException {
-        int lancer = 0;
-        for (Territoire territoire : ListeTerritoire) {
-            if (Tattaque == territoire.id){
-                if(territoire.getForce() == 1){
-                    throw new AttackWithOneDiceException("Tu ne peux pas attaquer avec ce territoire il n'a qu'un dé");// force = 1
+    public int defendTerritoire(Territoire defend){
+        int diceThrows = 0;
+        diceThrows = defend.diceThrower();
+        return diceThrows;
+    }
+
+    public void reinforcement(){
+        int nbTerritoire = getListeTerritoire().size();
+        for(int i = 0; i < nbTerritoire; i++){
+            ArrayList<Territoire> possRenfort = new ArrayList<>();
+            for(Territoire territoire : getListeTerritoire()){
+                if(territoire.getForce() < 8){
+                    possRenfort.add(territoire);
                 }
-                lancer = territoire.lancerDes();
-                return lancer;
+            }
+            if(possRenfort.size() != 0){
+                Random rand = new Random();
+                int randIndex = rand.nextInt(possRenfort.size());
+                possRenfort.get(randIndex).addForce(1);
             }
         }
-        throw new NotPocessedTerritoryException("Tu ne peux pas attaquer avec un territoire que tu ne possèdes pas");// non propriétaire
-    }
-
-    public int defendreTerritoire(int Tdefense) throws NotPocessedTerritoryException{
-        int lancer = 0;
-        for (Territoire territoire : ListeTerritoire) {
-            if (Tdefense == territoire.id){
-                lancer = territoire.lancerDes();
-                return lancer;
-            }
-        }
-        throw new NotPocessedTerritoryException("Tu ne peux pas défendre avec un territoire que tu ne possèdes pas");
     }
 
     @Override
     public String toString() {
         StringBuilder rendu = new StringBuilder("Joueur n°"+this.getId()+", territoires : \n");
-        for(Territoire i : ListeTerritoire){
+        for(Territoire i : Territoires){
             rendu.append(i.toString());
         }
         return String.valueOf(rendu);

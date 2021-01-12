@@ -1,57 +1,68 @@
 package com.roecker;
-import java.util.ArrayList;
+
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
-        System.out.println("\u001B[38m" + "Veuillez saisir le nombre de joueurs :");
-        int ent = 0;
-        Scanner saisieJoueurs = new Scanner(System.in);
+    public static void main(String[] args){
+        System.out.println("Voulez vous créer la partie à l'aide d'un fichier CSV ?");
+        Scanner saisiePartie = new Scanner(System.in);
+        Partie jeu;
+        String rendu;
         do{
-            System.out.println("Un nombre compris entre 1 et 10");
-            while(!saisieJoueurs.hasNextInt()){
-                System.out.println("ce n'est pas un nombre");
-                saisieJoueurs.next();
+            System.out.println("Y / N ?");
+            rendu  = saisiePartie.next();
+        }while(! (rendu.equals("Y") || rendu.equals("N")));
+        if(rendu.equals("N")){
+            System.out.println("\u001B[38m" + "Veuillez saisir le nombre de joueurs :");
+            int ent = 0;
+            Scanner saisieJoueurs = new Scanner(System.in);
+            do{
+                System.out.println("Un nombre compris entre 1 et 10");
+                while(!saisieJoueurs.hasNextInt()){
+                    System.out.println("ce n'est pas un nombre");
+                    saisieJoueurs.next();
+                }
+                ent = saisieJoueurs.nextInt();
+            }while(ent <= 1 || ent >= 11);
+            jeu = new Partie(ent);
+        }else{
+            try{
+                jeu = new Partie("C:/Users/benja/OneDrive/Bureau/Dice war update/src/com/roecker/Classeur1.csv");
+            } catch (TerritoryCanceledException e) {
+                System.out.println(e.getMessage() + "tu ne peux pas utiliser ce classeur");
+                jeu = new Partie(2);
             }
-            ent = saisieJoueurs.nextInt();
-        }while(ent <= 1 || ent >= 11);
-	    Partie jeu = new Partie(ent);
-	    boolean fin = false;
-	    do{
-            for(Joueur joueur : jeu.getJoueurs()){
-                System.out.println("\u001B[38m" + "C'est au tours du joueur n°"+joueur.id);
-                boolean test = false;
-                do{
-                    if(jeu.victoire(joueur)){
-                        fin = true;
-                        System.out.println("\u001B[38m" + "Le joueur "+joueur.getId()+" a gagné !");
-                        break;
-                    }
-                    if(jeu.defaite(joueur)){
-                        jeu.suppJoueur(joueur);
-                        break;
-                    }
-                    try{
-                        test = jeu.combat(joueur);
-                    }catch(Exception e){
-                        System.out.println(e.getMessage());
-                        test = true;
-                    }
-                    if(jeu.victoire(joueur)){
-                        fin = true;
-                        System.out.println("\u001B[38m" + "Le joueur "+joueur.getId()+" a gagné !");
-                        break;
-                    }else {
-                        System.out.println(jeu);
-                    }
-                }while(test);
-                if(fin){
-                    break;
+        }
+        boolean endOfGame = false;
+        boolean test = true;
+        do{
+            Random rand = new Random();
+            int randomId = rand.nextInt(jeu.getPlayersNum());
+            Joueur now = jeu.getPlayers().get(randomId);
+            System.out.println("C'est au tour du joueur n°"+now.getId());
+            do{
+                try{
+                    test = jeu.battle(now);
+                }catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
+                if(!test){
+                    now.reinforcement();
+                }
+                System.out.println(jeu);
+            }while(test);
+            if(jeu.victory(now)){
+                System.out.println("Le joueur n°"+now.getId()+" a gagné !");
+                endOfGame = true;
+            }
+            for(Joueur testLooser : jeu.getPlayers()){
+                if(jeu.defeated(testLooser)){
+                    System.out.println("Le joueur n°"+testLooser.getId()+" a perdu !");
+                    jeu.removePlayer(testLooser);
                 }
             }
-            jeu.renfort(jeu.getJoueurs());
-            System.out.println(jeu);
-        }while(!fin);
+        }while(!endOfGame);
     }
 }

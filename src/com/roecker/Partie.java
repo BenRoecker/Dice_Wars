@@ -1,27 +1,30 @@
 package com.roecker;
-
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
+import java.io.BufferedReader;
 
 public class Partie {
-    private final int NBjoueurs;
-    private Carte map;
-    private ArrayList<Joueur> joueurs;
 
-    //Inisialisation
+    private int playersNum;
+    private Carte map;
+    private ArrayList<Joueur> players;
+
     Partie(int joueurs){
-        this.NBjoueurs = joueurs;
-        Carte map  = new Carte(this.NBjoueurs);
+        this.playersNum = joueurs;
+        Carte map  = new Carte(this.playersNum);
         ArrayList<Territoire> territoires = new ArrayList<>();
-        Territoire[][] tableau = map.getMap();
-        for (Territoire[] value : tableau) {
+        Territoire[][] newmap = map.getMap();
+        for (Territoire[] value : newmap) {
             territoires.addAll(Arrays.asList(value));
         }
         Random rand = new Random();
         ArrayList<Joueur> challenger = new ArrayList<>();
-        for(int i = 0;i < NBjoueurs; i ++){
+        for(int i = 0;i < playersNum; i ++){
             int force = 0;
             Joueur J = new Joueur(i);
             for( int j = 0; j < 4; j ++){
@@ -44,22 +47,70 @@ public class Partie {
             challenger.add(J);
         }
         this.map = map;
-        this.joueurs = challenger;
+        this.players = challenger;
         System.out.println(challenger);
+    }
+
+    Partie(String CsvFileName) throws TerritoryCanceledException {
+        BufferedReader row = null;
+        String splitString = ";";
+        ArrayList<Territoire> maps = new ArrayList<>();
+        ArrayList<Joueur> challengers = new ArrayList<>();
+        try{
+            row = new BufferedReader(new FileReader(CsvFileName));
+            String line;
+            while ((line = row.readLine()) != null){
+                String[] territoire = line.split(splitString);
+                Territoire test = new Territoire(Integer.parseInt(territoire[0]));
+                String[] neighbors = territoire[2].split(",");
+                for(String adding : neighbors){
+                    test.addNeighbour(Integer.parseInt(adding));
+                }
+                test.setForce(Integer.parseInt(territoire[1]));
+                Joueur player = findjoueurs(Integer.parseInt(territoire[3]), challengers);
+                if(player == null){
+                    player = new Joueur(Integer.parseInt(territoire[3]));
+                    player.addTerritoire(test);
+                    challengers.add(player);
+                }else{
+                    player.addTerritoire(test);
+                }
+                maps.add(test);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (row != null){
+                try{
+                    row.close();
+                    System.out.println(challengers);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        this.playersNum = challengers.size();
+        try{
+            this.map = new Carte(maps, this.playersNum);
+        }catch(TerritoryCanceledException e){
+            System.out.println(e.getMessage());
+        }
+        this.players = challengers;
+
     }
 
     public int[] demandeattack(){
         Scanner saisieIDs = new Scanner(System.in);
         System.out.println("\u001B[0m" + "Veuillez saisir le teritoire qui attaque suivi du territoire à attaquer : ('fin' pour arreter)");
         int[] rendu = new int[2];
-
         while(!saisieIDs.hasNext("fin")){
             Scanner Linesec = new Scanner(saisieIDs.nextLine());
             if(Linesec.hasNextInt()){
                 int result1 = Linesec.nextInt();
-                if(Linesec.hasNextInt() && result1 >= 0 && result1 < 4*NBjoueurs){
+                if(Linesec.hasNextInt() && result1 >= 0 && result1 < 4*playersNum){
                     int result2 = Linesec.nextInt();
-                    if(result2 >= 0 && result2 < 4 * NBjoueurs){
+                    if(result2 >= 0 && result2 < 4 * playersNum){
                         rendu[0] = result1;
                         rendu[1] = result2;
                         return rendu;
@@ -77,10 +128,10 @@ public class Partie {
         return null;
     }
 
-    public Joueur findjoueurs(int id){
-        for(Joueur joueur: joueurs){
-            for(Territoire territoire : joueur.ListeTerritoire){
-                if(id == territoire.id){
+    public Object findjoueurs(Territoire search){
+        for(Joueur joueur: players){
+            for(Territoire territoire : joueur.getListeTerritoire()){
+                if(search.getId() == territoire.getId()){
                     return joueur;
                 }
             }
@@ -88,86 +139,77 @@ public class Partie {
         return null;
     }
 
-    public boolean victoire(Joueur now){
-        return now.getListeTerritoire().size() == NBjoueurs * 4;
+    public boolean victory(Joueur now){
+        return now.getListeTerritoire().size() == playersNum * 4;
     }
-    
-    public boolean defaite(Joueur now){
+
+    public boolean defeated(Joueur now){
         return now.getListeTerritoire().size() == 0;
     }
 
-    public boolean combat(Joueur attaque) throws YouAttackYourselfException, NotNeighbourException {
-        //initialisation combat
+    public ArrayList<Joueur> getPlayers() {
+        return players;
+    }
+
+    public int getPlayersNum() {
+        return playersNum;
+    }
+
+    public boolean battle(Joueur attaque) throws Exception {
         int[] rendu = demandeattack();
         if(rendu != null){
             int Idattaque = rendu[0];
             int Iddefense = rendu[1];
-            //ajout try et catch pour les exceptions
-            int valattaque = 0;
+            Territoire attack = map.getTerritoire(Idattaque);
+            Territoire defend = map.getTerritoire(Iddefense);
+            if(!attack.getIdNeighbours().contains(defend.getId())){
+                throw new NotNeighbourException();
+            }
+            Joueur attacker = (Joueur) findjoueurs(attack);
+            Joueur defender = (Joueur) findjoueurs(defend);
+            if(attacker != attaque){
+                throw new NotPocessedTerritoryException();
+            }
+            if(attacker == defender){
+               throw new YouAttackYourselfException();
+            }
+            int valattack;
             try{
-                valattaque = attaque.attaquerTerritoire(Idattaque);
+                valattack = attack.diceThrower();
             }catch(Exception e){
-                System.out.println(e.getMessage());
+                throw new AttackWithOneDiceException();
             }
-            Joueur defense = findjoueurs(Iddefense);
-            if(defense == attaque){
-                throw new YouAttackYourselfException("Tu ne peux pas attaquer un territoire que tu possède."); // le joueur qui attaque est le joueur qui défend
+            int valdefend = defend.diceThrower();
+            if(valattack-valdefend > 0){
+                attacker.addTerritoire(defender.popTerritoire(defend));
+                defend.setForce(attack.getForce()-1);
             }
-            int valdefense = 0;
-            try{
-                valdefense = defense.defendreTerritoire(Iddefense);
-            }catch(Exception e){
-                System.out.println("tu peux pas te défendre");
-            }
-
-            Territoire quiattaque = map.getTerritoire(Idattaque);
-            Territoire quidefend = map.getTerritoire(Iddefense);
-            boolean presence = false;
-            for(int voisin : quiattaque.idVoisins){
-                if (voisin == quidefend.id) {
-                    presence = true;// le territoire attaqué n'est pas un voisin
-                    break;
-                }
-            }
-            if(!presence){
-                throw new NotNeighbourException("le territoire que tu attaques n'est pas voisins");
-            }
-            if(valattaque-valdefense > 0){
-                attaque.addTerritoire(defense.popTerritoire(Iddefense));
-                quidefend.setForce(quiattaque.getForce()-1);
-            }
-            quiattaque.setForce(1);
+            attack.setForce(1);
             return true;
         }else{
-            return  false;
+            return false;
         }
     }
 
-    public void renfort(ArrayList<Joueur> joueurs){
-        for(Joueur joueur : joueurs){
-            int nbTerritoire = joueur.ListeTerritoire.size();
-            for(int i = 0; i < nbTerritoire; i++){
-                ArrayList<Territoire> possRenfort = new ArrayList<>();
-                for(Territoire territoire : joueur.ListeTerritoire){
-                    if(territoire.force < 8){
-                        possRenfort.add(territoire);
-                    }
-                }
-                if(possRenfort.size() != 0){
-                    Random rand = new Random();
-                    int randIndex = rand.nextInt(possRenfort.size());
-                    possRenfort.get(randIndex).addForce(1);
-                }
+    public void removePlayer(Joueur now){
+        if(players.get(0) == now){
+            ArrayList<Joueur> newlist = new ArrayList<>();
+            for(int i = 1; i < players.size();i ++){
+                newlist.add(players.get(i));
+            }
+            players = newlist;
+        }else{
+            players.remove(now);
+        }
+    }
+
+    public Joueur findjoueurs(Integer search, ArrayList<Joueur> players) {
+        for (Joueur joueur : players) {
+            if (joueur.getId() == search) {
+                return joueur;
             }
         }
-    }
-
-    public Carte getMap(){
-        return this.map;
-    }
-
-    public ArrayList<Joueur> getJoueurs(){
-        return this.joueurs;
+        return null;
     }
 
     @Override
@@ -176,23 +218,11 @@ public class Partie {
         rendu.append("\n");
 
         int i = 0;
-        for(Joueur joueur : this.joueurs){
+        for(Joueur joueur : this.players){
             rendu.append(joueur.toString());
             i ++;
             rendu.append("\n");
         }
         return rendu.toString();
-    }
-
-    public void suppJoueur(Joueur now){
-        if(joueurs.get(0) == now){
-            ArrayList<Joueur> newlist = new ArrayList<>();
-            for(int i = 1; i < joueurs.size();i ++){
-                newlist.add(joueurs.get(i));
-            }
-            joueurs = newlist;
-        }else{
-            joueurs.remove(now);
-        }
     }
 }
