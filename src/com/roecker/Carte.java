@@ -1,30 +1,52 @@
 package com.roecker;
 
-public class Carte {
-    Territoire[][] map;
-    int nbJoueurs;
+import java.util.ArrayList;
 
-    public Carte(int nombreJoueur){
-        this.map = new Territoire[nombreJoueur][4];
-        this.nbJoueurs = nombreJoueur;
+public class Carte {
+
+    private Territoire[][] map;
+    private int nbJoueurs;
+
+    public Carte(int playerNum){
+        this.map = new Territoire[playerNum][4];
+        this.nbJoueurs = playerNum;
         int id = 0;
-        for(int i = 0; i < nombreJoueur; i ++){
+        for(int i = 0; i < playerNum; i ++){
             for(int j = 0; j < 4; j ++){
                 Territoire test = new Territoire(id);
-                if(test.id-4 >= 0){
-                    test.addVoisin(id-4);
+                if(test.getId()-4 >= 0){
+                    test.addNeighbour(id-4);
                 }
-                if(test.id % 4 != 0){
-                    test.addVoisin(id-1);
+                if(test.getId() % 4 != 0){
+                    test.addNeighbour(id-1);
                 }
-                if(test.id % 4 != 3){
-                    test.addVoisin(id+1);
+                if(test.getId() % 4 != 3){
+                    test.addNeighbour(id+1);
                 }
-                if(test.id+4 < 4*nombreJoueur){
-                    test.addVoisin(id+4);
+                if(test.getId()+4 < 4*playerNum){
+                    test.addNeighbour(id+4);
                 }
                 id += 1;
-                map[i][j] = test;
+                this.map[i][j] = test;
+            }
+        }
+    }
+    public Carte(ArrayList<Territoire> territoires, int playerNum) throws TerritoryCanceledException {
+        this.map = new Territoire[playerNum][4];
+        int id = 0;
+        for(int i = 0; i < playerNum; i ++) {
+            for (int j = 0; j < 4; j++) {
+                boolean present = false;
+                for(Territoire territoire: territoires){
+                    if(territoire.getId() == id){
+                        this.map[i][j] = territoire;
+                        present = true;
+                    }
+                }
+                if(!present){
+                    throw new TerritoryCanceledException();
+                }
+                id += 1;
             }
         }
     }
@@ -37,12 +59,12 @@ public class Carte {
         Territoire Terri;
         for (Territoire[] ligne : this.map) {
             for (Territoire territoire : ligne) {
-                if(id == territoire.id){
+                if(id == territoire.getId()){
                     return territoire;
                 }
             }
         }
-        return null;
+        return null; // n'arrive jamais
     }
 
     @Override
