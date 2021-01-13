@@ -1,12 +1,15 @@
 package com.roecker;
-import java.io.FileNotFoundException;
+
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
-import java.io.BufferedReader;
 
 public class Partie {
 
@@ -224,5 +227,33 @@ public class Partie {
             rendu.append("\n");
         }
         return rendu.toString();
+    }
+
+    public void backup(String CSVFileName) {
+        Path path = Paths.get(CSVFileName);
+        try {
+            Files.write(path, "".getBytes());
+        } catch (IOException e) {
+            System.out.println("nul");
+        }
+        StringBuilder ajout = new StringBuilder();
+        for(int i = 0; i < playersNum; i ++){
+            for(int j = 0; j < 4; j ++){
+                Territoire territoire = this.map.getMap()[i][j];
+                Joueur joueur = (Joueur) findjoueurs(territoire);
+                StringBuilder neighbors = new StringBuilder();
+                for(Integer idNeighbors : territoire.getIdNeighbours()){
+                    neighbors.append(",").append(idNeighbors);
+                }
+                neighbors.deleteCharAt(0);
+                ajout.append(territoire.getId()).append(";").append(territoire.getForce()).append(";").append(neighbors).append(";").append(joueur.getId()).append("\n");
+                try {
+                    Files.write(path, ajout.toString().getBytes());
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+
     }
 }

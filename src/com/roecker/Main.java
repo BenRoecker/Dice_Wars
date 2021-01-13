@@ -1,5 +1,7 @@
 package com.roecker;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -29,7 +31,8 @@ public class Main {
             jeu = new Partie(ent);
         }else{
             try{
-                jeu = new Partie("C:/Users/benja/OneDrive/Bureau/Dice war update/src/com/roecker/Classeur1.csv");
+                Path path = Paths.get("Classeur1.csv");
+                jeu = new Partie(String.valueOf(path));
             } catch (TerritoryCanceledException e) {
                 System.out.println(e.getMessage() + "tu ne peux pas utiliser ce classeur");
                 jeu = new Partie(2);
@@ -53,6 +56,18 @@ public class Main {
                 }
                 System.out.println(jeu);
             }while(test);
+            System.out.println("veut tu sauvegarder ta partie ?");
+            Scanner saisieBackup = new Scanner(System.in);
+            String backupApproval = "";
+            do{
+                System.out.println("Y / N ?");
+                backupApproval = saisieBackup.next();
+            }while(! (backupApproval.equals("Y") || backupApproval.equals("N")));
+            if(backupApproval.equals("Y")){
+                System.out.println("Sauvegarde en cours...");
+                jeu.backup("Classeur1.csv");
+                System.out.println("Sauvegarde effectuée");
+            }
             if(jeu.victory(now)){
                 System.out.println("Le joueur n°"+now.getId()+" a gagné !");
                 endOfGame = true;
