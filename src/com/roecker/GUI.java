@@ -25,7 +25,6 @@ public class GUI implements ActionListener {
     public GUI() {
         String nbJoueurs;
 
-
         frame = new JFrame();
         tab = new JPanel();
         UI = new JPanel();
@@ -80,6 +79,10 @@ public class GUI implements ActionListener {
         frame.setTitle("Dice War");
         frame.pack();
         frame.setVisible(true);
+    }
+
+    public static void main(String[] args){
+        new GUI();
     }
 
     @Override

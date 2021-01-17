@@ -8,7 +8,6 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args){
-        //new GUI();
         System.out.println("Voulez vous créer la partie à l'aide d'un fichier CSV ?");
         Scanner saisiePartie = new Scanner(System.in);
         Partie jeu;
